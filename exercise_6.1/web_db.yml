@@ -1,0 +1,40 @@
+---
+- hosts: webservers
+  sudo: yes
+  
+  tasks:
+  - name: Ensure that Apache is installed Debian Style
+    apt: name=apache2 state=present update_cache=yes
+    when: ansible_os_family == "Debian"
+
+  - name: Ensure that Apache is installed RedHat Style
+    yum: name=httpd state=present
+    when: ansible_os_family == "RedHat"
+
+  - name: Start Apache Services (Debian)
+    service: name=apache2 enabled=yes state=started
+    when: ansible_os_family == "Debian"
+
+  - name: Start Apache Services (RedHat)
+    service: name=httpd enabled=yes state=started
+    when: ansible_os_family == "RedHat"
+
+  - name: Check path that simply doesn't exist, debug check
+    command: ls /path/doesnt/exist
+    register: result
+    ignore_errors: yes
+
+  - name: Now read in the error from the debug check
+    debug: msg="Failure to list directory!"
+    when: result|failed
+
+- hosts: dbservers
+  sudo: yes
+
+  tasks:
+  - name: Ensure that mysql-server is installed
+    apt: name=mysql-server state=present
+
+  - name: Start mysql
+    service: name=mysql enabled=yes state=started
+  gather_facts: false
