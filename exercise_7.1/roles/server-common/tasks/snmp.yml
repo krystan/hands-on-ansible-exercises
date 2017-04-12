@@ -1,6 +1,6 @@
 ---
 - name: Install net-snmp
-- apt: name=snmp state=present
+  apt: name=snmp state=present
 
 - name: Install snmp mibs downloader
   apt: name=snmp-mibs-downloader
