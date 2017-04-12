@@ -1,0 +1,10 @@
+---
+- hosts: webservers:dbservers
+  become: yes
+  become_user: root
+  gather_facts: yes
+  roles:
+  - server-common
+
+- include: webserver.yml
+- include: dbserver.yml

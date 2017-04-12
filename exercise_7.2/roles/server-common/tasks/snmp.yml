@@ -1,0 +1,13 @@
+---
+- name: Install net-snmp
+  apt: name=snmp state=present
+
+- name: Install snmp mibs downloader
+  apt: name=snmp-mibs-downloader
+
+- name: Install snmp config
+  apt: name=snmpd state=present
+  notify: SNMP Restart
+
+- name: Make sure service is running
+  service: name=snmpd state=started
